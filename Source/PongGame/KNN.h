@@ -13,8 +13,6 @@
 #include <memory>
 #include <vector>
 #include <string>
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/Eigen/Dense"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/nanoflann-1.2.3/include/nanoflann.hpp"
 
 
 #include <boost/archive/xml_oarchive.hpp> 
