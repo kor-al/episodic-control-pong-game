@@ -20,8 +20,8 @@ A small summary is also written to .txt file simultaneously with the archive.
 
 ## Tuning parameters
 * number of neighbors (K - kKNN)
-* dimension of the state vector (kDimState)
-* size of the transformed screenshot (kTransformedImageDim)
+* dimension of a state vector (kDimState)
+* size of a transformed screenshot (kTransformedImageDim)
 * buffer size (the size of QEC table for each action - kBufferMaxsize)
 * epsilon decay from a maximum to a minimum value (kEpsMax, kEpsMin, kEpsDenominator)
 * discount coefficient (kECdiscount)
