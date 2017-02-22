@@ -2,10 +2,6 @@
 
 #pragma once
 
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/core.hpp"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/core/mat.hpp"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/highgui.hpp"	
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/imgproc.hpp"
 #include "Score.h"
 #include "ECagent.h"
 
