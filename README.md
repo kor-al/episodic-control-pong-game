@@ -7,17 +7,26 @@ This algorithm is described in detail in the folowing paper:
 
 An epsilon-greedy strategy is added: an epsilon is decreasing with time.
 
-## KNN
-KNN search is implemented using the FLANN library from OpenCV 3.0.
+## Implementation
+### Environment processing
+Every screenshot is tranformed to a simplified (b/w, smaller size, filters) image. This image is projected to a vector state.
+Random projection s.t. x->Ax is exploited, where A is randrom matrix with entries that are from a standart Gaussian distribution. 
+### KNN
+A KNN search is implemented using a KDtree from the FLANN library from OpenCV 3.0.
 * may be it should be replaced with the nanoflann library
+### Backup
+A calculated QECtable is saved (serialized) to a file 'archive.xml'. This file is quite heavy (~47 MB) but still readable. To decrease its size, a binary archive can be used.
+A small summary is also written to .txt file simultaneously with the archive. 
 
 ## Tuning parameters
 * number of neighbors (K - kKNN)
-* size of the transformed screenshot (the dimention state size - kDimState)
+* dimension of the state vector (kDimState)
+* size of the transformed screenshot (kTransformedImageDim)
 * buffer size (the size of QEC table for each action - kBufferMaxsize)
 * epsilon decay from a maximum to a minimum value (kEpsMax, kEpsMin, kEpsDenominator)
 * discount coefficient (kECdiscount)
-* number of episodes before the next save (kSaveEpisodes);
+* number of episodes before the next save (kSaveEpisodes)
+* number of frames to skip (kFrameSkip)
 
 ## Dependencies
 1. OpenCV plagin for Unreal Engine 4 (https://wiki.unrealengine.com/Integrating_OpenCV_Into_Unreal_Engine_4)
