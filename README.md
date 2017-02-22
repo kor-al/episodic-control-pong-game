@@ -2,15 +2,16 @@
 Model-Free Episodic Control algorithm written in C++ and tested in Unreal Engine 4 in Pong Game.
 
 ## Algorithm
-This algorithm is described in detail in the folowing paper: "Model-Free Episodic Control" by Blundell Charles, Uria Benigno, Pritzel Alexander, Li Yazhe et. al. (https://arxiv.org/pdf/1606.04460.pdf)
+This algorithm is described in detail in the folowing paper: 
+"Model-Free Episodic Control" by Blundell Charles, Uria Benigno, Pritzel Alexander, Li Yazhe et. al. (https://arxiv.org/pdf/1606.04460.pdf)
 
 An epsilon-greedy strategy is added: an epsilon is decreasing with time.
 
 ## KNN
-KNN search is implemented using FLANN library from OpenCV 3.0.
-* may be it should be replaced with nanoflann library
+KNN search is implemented using the FLANN library from OpenCV 3.0.
+* may be it should be replaced with the nanoflann library
 
-## Tuned parameters
+## Tuning parameters
 * number of neighbors (K - kKNN)
 * size of the transformed screenshot (the dimention state size - kDimState)
 * buffer size (the size of QEC table for each action - kBufferMaxsize)
