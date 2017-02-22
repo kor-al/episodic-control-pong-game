@@ -1,0 +1,9 @@
+{
+	"Changelist" : 3249277,
+	"CompatibleChangelist" : 3195953,
+	"BuildId" : "eca4e6b3-381e-4403-b137-8777f707a2b8",
+	"Modules" : 
+	{
+		"OpenCV" : "UE4Editor-OpenCV.dll"
+	}
+}

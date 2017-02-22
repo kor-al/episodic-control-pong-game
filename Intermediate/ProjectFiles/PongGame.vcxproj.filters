@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="..\..\PongGame.uproject" />
+    <Filter Include="Source">
+      <UniqueIdentifier>{7C231229-0BB6-4B50-8341-CB9837431DED}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Source\PongGame.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <None Include="..\..\Source\PongGameEditor.Target.cs">
+      <Filter>Source</Filter>
+    </None>
+    <Filter Include="Config">
+      <UniqueIdentifier>{51E88E1F-002E-4832-B916-4AB0AA830699}</UniqueIdentifier>
+    </Filter>
+    <None Include="..\..\Config\DefaultEditor.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultEngine.ini">
+      <Filter>Config</Filter>
+    </None>
+    <None Include="..\..\Config\DefaultInput.ini">
+      <Filter>Config</Filter>
+    </None>
+    <Filter Include="Source\PongGame">
+      <UniqueIdentifier>{5153F5AF-5E6E-4BCE-A9CA-F5C97284B63E}</UniqueIdentifier>
+    </Filter>
+    <ClCompile Include="..\..\Source\PongGame\AIPaddleController.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\PongGame\AIPaddleController.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <None Include="..\..\Source\PongGame\PongGame.Build.cs">
+      <Filter>Source\PongGame</Filter>
+    </None>
+    <ClCompile Include="..\..\Source\PongGame\PongGame.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\PongGame\PongGame.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\PongGame\Score.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\PongGame\Score.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\Source\PongGame\ScreenCapturer.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClInclude Include="..\..\Source\PongGame\ScreenCapturer.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\PongGame\Paddle.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PongGame\Pong_GameMode.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PongGame\Ball.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PongGame\AgentTrainer.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PongGame\ECagent.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PongGame\HistoryRecorder.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PongGame\KNN.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PongGame\QECtable.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PongGame\cvMat_serialization.h">
+      <Filter>Source\PongGame</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\PongGame\Paddle.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PongGame\Pong_GameMode.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PongGame\Ball.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PongGame\AgentTrainer.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PongGame\ECagent.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PongGame\HistoryRecorder.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PongGame\KNN.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PongGame\QECtable.cpp">
+      <Filter>Source\PongGame</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
