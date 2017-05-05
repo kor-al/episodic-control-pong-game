@@ -15,7 +15,7 @@ Random projection s.t. x->Ax is exploited, where A is randrom matrix with entrie
 A KNN search is implemented using a KDtree from the FLANN library from OpenCV 3.0.
 * may be it should be replaced with the nanoflann library
 ### Backup
-A calculated QECtable is saved (serialized) to a file 'archive.xml'. This file is quite heavy (~47 MB) but still readable. To decrease its size, a binary archive can be used.
+A calculated QECtable is saved (serialized) to a .xml archive. This file is quite heavy (~47 MB) but still readable. To decrease its size, a binary archive can be used.
 A small summary is also written to .txt file simultaneously with the archive. 
 
 ## Tuning parameters
