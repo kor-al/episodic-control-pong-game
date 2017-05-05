@@ -33,44 +33,73 @@ void  AAIPaddleController::BeginPlay()
 
 void AAIPaddleController::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaSeconds);
-	step_count++;
-	if (step_count%kFrameSkip)
-		return;
 
+
+	Super::Tick(DeltaSeconds);
 	int action = 0;
 	//UE_LOG(LogTemp, Warning, TEXT("AI controller Tick"));
 	APaddle* paddle = (APaddle*)GetPawn();
 	APong_GameMode* game_mode = paddle->pGameMode;
 	Score sc = get_score(game_mode);
 
-	//Attribute this to previous action
 	int reward = current_score.update(sc);
-	
+	cv::Mat screen = get_screen(game_mode);
+
 	//float ball_position = get_ball_position(game_mode);
 	//float pawn_position = ((APawn*)paddle)->GetActorLocation().Z;
 	//paddle->MovementDirection = sign(ball_position - pawn_position);
-	
-	cv::Mat screen = get_screen(game_mode);
+
 	//skip empty frames
 	if (screen.cols == 0)
 		return;
+	//--------------------------------------------
+	step_count++;
 	cv::Mat screen_t = transform_image(screen);
-	if (bFirstTick )
-	{
-		action = agent.start_episode(screen_t);
-		bFirstTick = false;
-		return;
-	}
-	UE_LOG(LogTemp, Warning, TEXT("reward = %d"), reward);
-	action = agent.step(screen_t, reward);
+	UE_LOG(LogTemp, Warning, TEXT("____reward = %i"), reward);
 
 	if (reward)
 	{
 		agent.end_episode(reward);
 		bFirstTick = true;
+		step_count = 0;
+		return;
 	}
+
+	if (step_count%kFrameSkip) //add skipped frames into one frame to process (while the last action is repeated)
+	{
+		if (step_count == 1)
+			screen_t.copyTo(accum_obs);
+		else
+		{
+			cv::addWeighted(screen_t, 1, accum_obs, 1, 0, accum_obs);
+		}
+		action = prev_action;
+	}
+	else
+	{
+		step_count = 0;
+
+		//cv::imwrite("D:/Alice/Documents/HSE/masters/observations/" + std::to_string(total_frames_count) + ".png", accum_obs);
+
+		total_frames_count++;
+
+		if (bFirstTick)
+		{
+			action = agent.start_episode(accum_obs);
+			bFirstTick = false;
+		}
+		else
+		{
+			action = agent.step(accum_obs, reward);
+		}
+	}
+
+
+
+
+	UE_LOG(LogTemp, Warning, TEXT("____action = %i"), action);
 	paddle->MovementDirection = get_action_direction(action);
+	prev_action = action;
 }
 
 
@@ -117,9 +146,16 @@ Score AAIPaddleController::get_score(class APong_GameMode*game_mode)
 
 int AAIPaddleController::get_action_direction(int action)
 {
+	//3 actions
+	//if (action == 0)
+	//	return 0;
+	//else if (action == 1)
+	//	return 1;
+	//else
+	//	return -1;
+
+	//2 actions
 	if (action == 0)
-		return 0;
-	else if (action == 1)
 		return 1;
 	else
 		return -1;
@@ -136,5 +172,7 @@ cv::Mat AAIPaddleController::transform_image(cv::Mat screen)
 	//cv::Mat dst(newH, newW, CV_8U);
 	cv::resize(screen, screen, cv::Size(kTransformedImageDim, kTransformedImageDim), cv::INTER_AREA);
 	cv::threshold(screen, screen, 1, 255, cv::THRESH_BINARY);
+	//cv::normalize(screen, screen, 1, 0, cv::NORM_MINMAX); [0,1] in matrix , if commented [0,255]
+	screen.convertTo(screen, CV_32FC1);
 	return screen;
 }

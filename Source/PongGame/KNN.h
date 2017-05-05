@@ -13,9 +13,6 @@
 #include <memory>
 #include <vector>
 #include <string>
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/Eigen/Dense"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/nanoflann-1.2.3/include/nanoflann.hpp"
-
 
 #include <boost/archive/xml_oarchive.hpp> 
 #include <boost/archive/xml_iarchive.hpp> 
@@ -36,24 +33,20 @@ class PONGGAME_API KNN
 {
 private:
 
-	//typedef nanoflann::KDTreeEigenMatrixAdaptor<Eigen::MatrixXf>  kd_tree;
-	//kd_tree* states_index;
 
-	//std::unique_ptr<kd_tree> t;
-	//std::shared_ptr<kd_tree> t;
 
 	int capacity;
 	cv::Mat states;
-	std::vector<double> q_values;
-	std::vector<double> LRUs;
+	std::vector<float> q_values;
+	std::vector<float> LRUs;
 	int current_capacity;
-	double time;
+	float time;
 
-	///std::shared_ptr<cv::flann::Index> t;
-	//cv::flann::Index* kdtree;
+
 	cv::flann::Index kdtree;
 
-	friend class boost::serialization::access;
+	//xml achive
+	/*friend class boost::serialization::access;
 	template<class Archive>
 	void save(Archive & ar, const unsigned int version) const
 	{
@@ -74,22 +67,44 @@ private:
 		ar & BOOST_SERIALIZATION_NVP(time);
 		ar & BOOST_SERIALIZATION_NVP(states);
 	}
+	BOOST_SERIALIZATION_SPLIT_MEMBER()*/
+
+	//binary achive
+	friend class boost::serialization::access;
+	template<class Archive>
+	void save(Archive & ar, const unsigned int version) const
+	{
+		ar & capacity;
+		ar & current_capacity;
+		ar & q_values;
+		ar & LRUs;
+		ar & time;
+		ar & states;
+	}
+	template<class Archive>
+	void load(Archive & ar, const unsigned int version)
+	{
+		ar & capacity;
+		ar & current_capacity;
+		ar & q_values;
+		ar & LRUs;
+		ar & time;
+		ar & states;
+	}
 	BOOST_SERIALIZATION_SPLIT_MEMBER()
+
 
 public:
 
-	double knn_value(cv::Mat key, int knn);
-	void add(cv::Mat key, double value);
-	bool peek(cv::Mat key, double value, bool bModify, double* result_qval);
-	void printmat(cv::Mat observation);
+	float knn_value(cv::Mat key, int knn);
+	void add(cv::Mat key, float value);
+	bool peek(cv::Mat key, float value, bool bModify, float* result_qval);
 
 	void saveIndex(std::string filename) const;
 	void loadIndex(std::string filename);
 
 	KNN();
 	KNN(int capacity, int dim);
-	KNN(const KNN& that);
-	KNN& operator=(const KNN& that);
 	~KNN();
 };
 

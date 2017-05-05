@@ -2,10 +2,6 @@
 
 #pragma once
 
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/core.hpp"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/core/mat.hpp"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/highgui.hpp"	
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/imgproc.hpp"
 #include "Score.h"
 #include "ECagent.h"
 
@@ -22,8 +18,8 @@ class PONGGAME_API AAIPaddleController : public AAIController
 	GENERATED_BODY()
 	
 public:
-	static const int kFrameSkip = 4;
-	static const int kTransformedImageDim = 80;
+	static const int kFrameSkip = 5; //better than 4
+	static const int kTransformedImageDim = 84;
 
 	// Sets default values for this actor's properties
 	AAIPaddleController();
@@ -38,7 +34,9 @@ public:
 
 	float sign(int x);
 
-	int step_count;
+	int step_count; // to skip frames
+
+	int last_action;
 
 	Score current_score;
 
@@ -53,5 +51,13 @@ public:
 	cv::Mat transform_image(cv::Mat screen);
 
 	bool bFirstTick;
+
+	//to save observation with number
+	int total_frames_count;
+
+	//to merge every kFrameSkip frames
+	int prev_action;
+	cv::Mat accum_obs;
+
 
 };

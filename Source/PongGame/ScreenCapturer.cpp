@@ -32,7 +32,7 @@ void AScreenCapturer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (CaptureScreenshot(&Screenshot)) {
-		 //UE_LOG(LogTemp, Warning, TEXT("Screenshot taken, dimensions: (%d, %d), timer: %f, score: %u"),
+		 //UE_LOG(LogTemp, Warning, TEXT("Screenshot taken, dimensions: (%f, %f), timer: %f, score: %u"),
 		 //       Height,
 		 //       Width,
 		 //       DeltaTime);

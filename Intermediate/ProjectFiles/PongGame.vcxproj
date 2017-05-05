@@ -565,9 +565,7 @@
     <None Include="..\..\Config\DefaultEditor.ini" />
     <None Include="..\..\Config\DefaultEngine.ini" />
     <None Include="..\..\Config\DefaultInput.ini" />
-    <ClCompile Include="..\..\Source\PongGame\AgentTrainer.cpp" />
     <ClCompile Include="..\..\Source\PongGame\AIPaddleController.cpp" />
-    <ClInclude Include="..\..\Source\PongGame\AgentTrainer.h" />
     <ClInclude Include="..\..\Source\PongGame\AIPaddleController.h" />
     <None Include="..\..\Source\PongGame\PongGame.Build.cs" />
     <ClCompile Include="..\..\Source\PongGame\Ball.cpp" />

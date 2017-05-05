@@ -11,9 +11,9 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define PONGGAME_AIPaddleController_generated_h
 
-#define PongGame_Source_PongGame_AIPaddleController_h_22_RPC_WRAPPERS
-#define PongGame_Source_PongGame_AIPaddleController_h_22_RPC_WRAPPERS_NO_PURE_DECLS
-#define PongGame_Source_PongGame_AIPaddleController_h_22_INCLASS_NO_PURE_DECLS \
+#define PongGame_Source_PongGame_AIPaddleController_h_18_RPC_WRAPPERS
+#define PongGame_Source_PongGame_AIPaddleController_h_18_RPC_WRAPPERS_NO_PURE_DECLS
+#define PongGame_Source_PongGame_AIPaddleController_h_18_INCLASS_NO_PURE_DECLS \
 	private: \
 	static void StaticRegisterNativesAAIPaddleController(); \
 	friend PONGGAME_API class UClass* Z_Construct_UClass_AAIPaddleController(); \
@@ -24,7 +24,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	enum {IsIntrinsic=COMPILED_IN_INTRINSIC};
 
 
-#define PongGame_Source_PongGame_AIPaddleController_h_22_INCLASS \
+#define PongGame_Source_PongGame_AIPaddleController_h_18_INCLASS \
 	private: \
 	static void StaticRegisterNativesAAIPaddleController(); \
 	friend PONGGAME_API class UClass* Z_Construct_UClass_AAIPaddleController(); \
@@ -35,7 +35,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 	enum {IsIntrinsic=COMPILED_IN_INTRINSIC};
 
 
-#define PongGame_Source_PongGame_AIPaddleController_h_22_STANDARD_CONSTRUCTORS \
+#define PongGame_Source_PongGame_AIPaddleController_h_18_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AAIPaddleController(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(AAIPaddleController) \
@@ -48,7 +48,7 @@ private: \
 public:
 
 
-#define PongGame_Source_PongGame_AIPaddleController_h_22_ENHANCED_CONSTRUCTORS \
+#define PongGame_Source_PongGame_AIPaddleController_h_18_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API AAIPaddleController(AAIPaddleController&&); \
@@ -59,26 +59,26 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AAIPaddleController); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(AAIPaddleController)
 
 
-#define PongGame_Source_PongGame_AIPaddleController_h_22_PRIVATE_PROPERTY_OFFSET
-#define PongGame_Source_PongGame_AIPaddleController_h_19_PROLOG
-#define PongGame_Source_PongGame_AIPaddleController_h_22_GENERATED_BODY_LEGACY \
+#define PongGame_Source_PongGame_AIPaddleController_h_18_PRIVATE_PROPERTY_OFFSET
+#define PongGame_Source_PongGame_AIPaddleController_h_15_PROLOG
+#define PongGame_Source_PongGame_AIPaddleController_h_18_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	PongGame_Source_PongGame_AIPaddleController_h_22_PRIVATE_PROPERTY_OFFSET \
-	PongGame_Source_PongGame_AIPaddleController_h_22_RPC_WRAPPERS \
-	PongGame_Source_PongGame_AIPaddleController_h_22_INCLASS \
-	PongGame_Source_PongGame_AIPaddleController_h_22_STANDARD_CONSTRUCTORS \
+	PongGame_Source_PongGame_AIPaddleController_h_18_PRIVATE_PROPERTY_OFFSET \
+	PongGame_Source_PongGame_AIPaddleController_h_18_RPC_WRAPPERS \
+	PongGame_Source_PongGame_AIPaddleController_h_18_INCLASS \
+	PongGame_Source_PongGame_AIPaddleController_h_18_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define PongGame_Source_PongGame_AIPaddleController_h_22_GENERATED_BODY \
+#define PongGame_Source_PongGame_AIPaddleController_h_18_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	PongGame_Source_PongGame_AIPaddleController_h_22_PRIVATE_PROPERTY_OFFSET \
-	PongGame_Source_PongGame_AIPaddleController_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
-	PongGame_Source_PongGame_AIPaddleController_h_22_INCLASS_NO_PURE_DECLS \
-	PongGame_Source_PongGame_AIPaddleController_h_22_ENHANCED_CONSTRUCTORS \
+	PongGame_Source_PongGame_AIPaddleController_h_18_PRIVATE_PROPERTY_OFFSET \
+	PongGame_Source_PongGame_AIPaddleController_h_18_RPC_WRAPPERS_NO_PURE_DECLS \
+	PongGame_Source_PongGame_AIPaddleController_h_18_INCLASS_NO_PURE_DECLS \
+	PongGame_Source_PongGame_AIPaddleController_h_18_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

@@ -64,9 +64,6 @@
     <ClInclude Include="..\..\Source\PongGame\Ball.h">
       <Filter>Source\PongGame</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\PongGame\AgentTrainer.h">
-      <Filter>Source\PongGame</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\PongGame\ECagent.h">
       <Filter>Source\PongGame</Filter>
     </ClInclude>
@@ -91,9 +88,6 @@
       <Filter>Source\PongGame</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\PongGame\Ball.cpp">
-      <Filter>Source\PongGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\PongGame\AgentTrainer.cpp">
       <Filter>Source\PongGame</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\PongGame\ECagent.cpp">

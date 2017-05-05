@@ -2,10 +2,6 @@
 
 #pragma once
 
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/core.hpp"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/core/mat.hpp"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/highgui.hpp"	
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/imgproc.hpp"
 #include "KNN.h"
 
 /**
@@ -19,23 +15,40 @@ private:
 	int buffer_maxsize;
 	cv::Mat matrix_proj;
 
+	//xml achive
+	//friend class boost::serialization::access;
+	//template<class Archive>
+	//void serialize(Archive& archive, const unsigned int version)
+	//{
+	//		archive & BOOST_SERIALIZATION_NVP(knn);
+	//		archive & BOOST_SERIALIZATION_NVP(ec_buffer);
+	//		archive & BOOST_SERIALIZATION_NVP(buffer_maxsize);
+	//		archive & BOOST_SERIALIZATION_NVP(matrix_proj);
+	//}
+
+	//binary achive
 	friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive& archive, const unsigned int version)
 	{
-			archive & BOOST_SERIALIZATION_NVP(knn);
-			archive & BOOST_SERIALIZATION_NVP(ec_buffer);
-			archive & BOOST_SERIALIZATION_NVP(buffer_maxsize);
-			archive & BOOST_SERIALIZATION_NVP(matrix_proj);
+		archive & knn;
+		archive & eps;
+		archive & ec_buffer;
+		archive & buffer_maxsize;
+		archive & matrix_proj;
 	}
+
 public:
+	float eps; // to serialize with QEC table
 	cv::Mat fprojection(cv::Mat observation);
-	double estimate(cv::Mat observation, int action);
-	void update(cv::Mat observation, int action, int reward);
+	float estimate(cv::Mat observation, int action);
+	void update(cv::Mat observation, int action, float value);
 	QECtable(int knn, int dim_state, int dim_observation, int buffer_maxsize, int num_action);
 	QECtable();
 	~QECtable();
 	void load_kdtrees(std::string filename);
 	void save_kdtrees(std::string filename);
-	
+	void save_mat();
+	void print_mat(); // just to check random matrix (.txt file)
+	void load_mat();
 };

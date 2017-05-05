@@ -3,10 +3,6 @@
 #pragma once
 
 #include "HistoryRecorder.h"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/core/core.hpp"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/core.hpp"
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/highgui.hpp"	
-//#include "D:/Alice/Documents/Unreal Projects/PongGame/ThirdParty/OpenCV/Includes/opencv2/imgproc.hpp"
 #include "Score.h"
 #include "QECtable.h"
 #include <ctime>
@@ -18,15 +14,15 @@
 class PONGGAME_API ECagent
 {
 private:
-	static const int  kKnn = 10;
-	static const int kDimState = 10;
-	static const int kBufferMaxsize = 10000;
+	static const int  kKnn = 11;
+	static const int kDimState = 64;
+	static const int kBufferMaxsize = 1000000;
 	static const float kEpsMax;
 	static const float kEpsMin;
-	static const int kEpsDenominator = 100000;
+	static const int kEpsDenominator = 10000;
 	static const float kECdiscount;
-	static const int kNumActions = 2; //0, 1 or 2
-	static const int kSaveEpisodes = 10;
+	static const int kNumActions = 1; //0 or 1 
+	static const int kSaveEpisodes = 1000;
 	static const std::string kQECtableFilename;
 	static const std::string kSummaryFilename;
 	static const std::string kKDtreeFilename;
