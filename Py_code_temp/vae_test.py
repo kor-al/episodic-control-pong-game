@@ -81,7 +81,6 @@ def inference_network(x, latent_dim):
   Args:
     x: A batch of images
     latent_dim: The latent dimensionality.
-    hidden_size: The size of the neural net hidden layers.
   Returns:
     mu: Mean parameters for the variational family Normal
     sigma: Standard deviation parameters for the variational family Normal
@@ -125,9 +124,10 @@ def generative_network(z, latent_dim):
   """Build a generative network parametrizing the likelihood of the data
   Args:
     z: Samples of latent variables
-    hidden_size: Size of the hidden state of the neural net
+    latent_dim: The latent dimensionality
   Returns:
-    bernoulli_logits: logits for the Bernoulli likelihood of the data
+    mu
+    sigma
   """
   # with slim.arg_scope([slim.fully_connected], activation_fn=tf.nn.relu):
   #   net = slim.fully_connected(z, hidden_size)
@@ -173,10 +173,9 @@ def train():
       # The variational distribution is a Normal with mean and standard
       # deviation given by the inference network
       q_z = st.StochasticTensor(distributions.Normal(loc=q_mu, scale =q_sigma))
-      print (tf.shape(q_z))
 
   with tf.variable_scope('model'):
-    # The likelihood is Bernoulli-distributed with logits given by the
+    # The likelihood is given by the
     # generative network
     p_x_given_z_mu, p_x_given_z_sigma  = generative_network(z=q_z, latent_dim=FLAGS.latent_dim)
     #p_x_given_z = distributions.Bernoulli(logits=p_x_given_z_logits)
