@@ -64,7 +64,7 @@ def read_data(path, num):
      image = tf.to_float(image, name='ToFloat')
      return image
 
-path = r"D:/Alice/Documents/HSE/masters/observations/"
+path = r"-----------------"
 
 
 # imglist = [path+("%i.png" % i) for i in range(1,9)]
