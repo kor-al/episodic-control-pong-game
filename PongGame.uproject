@@ -18,6 +18,10 @@
 		{
 			"Name": "OpenCV",
 			"Enabled": true
+		},
+		{
+			"Name": "UnrealEnginePython",
+			"Enabled": true
 		}
 	]
 }

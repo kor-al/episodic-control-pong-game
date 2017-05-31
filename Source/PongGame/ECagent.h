@@ -9,8 +9,8 @@
 #include "float.h"
 
 /**
- * 
- */
+*
+*/
 class PONGGAME_API ECagent
 {
 private:
@@ -26,6 +26,7 @@ private:
 	static const std::string kQECtableFilename;
 	static const std::string kSummaryFilename;
 	static const std::string kKDtreeFilename;
+	static const bool bEmbedding = 1; //0 == random projection, 1 == VAE
 
 	//-----
 
@@ -51,6 +52,7 @@ public:
 	int start_episode(cv::Mat observation);
 	int step(cv::Mat observation, int reward);
 	int choose_action(cv::Mat observation, int reward);
+	int random_action();
 	void end_episode(int reward, bool bTerminal = true);
 
 	ECagent();

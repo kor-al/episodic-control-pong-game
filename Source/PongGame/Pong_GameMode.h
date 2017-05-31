@@ -27,4 +27,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "screenshots")
 	class AScreenCapturer* ScreenCapturer;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "screenshots")
+	int Frame_Counter;
+
 };

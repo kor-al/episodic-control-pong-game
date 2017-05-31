@@ -59,6 +59,11 @@ int ECagent::step(cv::Mat observation, int reward)
 	return action;
 }
 
+int ECagent::random_action()
+{
+	return FMath::RandRange(0, kNumActions);
+}
+
 int ECagent::choose_action(cv::Mat observation, int reward)
 {
 	history.add_node(last_observation, last_action, reward, false);
@@ -66,7 +71,7 @@ int ECagent::choose_action(cv::Mat observation, int reward)
 	//rand_num = -1; //only rand actions
 	if (rand_num<eps)
 	{
-		int action = FMath::RandRange(0, kNumActions);
+		int action = random_action();
 		UE_LOG(LogTemp, Warning, TEXT("---random step, eps = %f, action = %u, r = %f"), eps, action, rand_num);
 		return action;
 	}
@@ -147,9 +152,10 @@ void ECagent::loadQECtable()
 		UE_LOG(LogTemp, Warning, TEXT("_____QEC table LOADED_____"));
 		//boost::archive::xml_iarchive ia(file);
 		//ia >> BOOST_SERIALIZATION_NVP(qectable);
+		
 		boost::archive::binary_iarchive ia(file);
 		ia >> qectable;
-		qectable->load_kdtrees(kKDtreeFilename);
+		//qectable->load_kdtrees(kKDtreeFilename);
 		eps = qectable->eps;
 	}
 }

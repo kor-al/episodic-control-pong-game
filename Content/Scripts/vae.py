@@ -83,7 +83,7 @@ class VAE(object):
             self.x, self.q_mu, self.q_sigma = inference_network(latent_dim)
             self.q_z = st.StochasticTensor(distributions.Normal(loc=self.q_mu, scale =self.q_sigma))
             self.p_x_given_z_mu, self.p_x_given_z_sigma  = generative_network(z=self.q_z)
-            self.z = self.q_z.distribution.sample([latent_dim,1])#prior z
+            self.z = self.q_z.distribution.sample(self.n_samples)#prior z
 
         with tf.variable_scope('model', reuse=True):
             self.p_x_given_z = distributions.Normal(loc=self.p_x_given_z_mu, scale = self.p_x_given_z_sigma)
@@ -101,7 +101,8 @@ class VAE(object):
         self.summaries = tf.summary.merge_all()
 
     def get_state(self, session, obs):
-        z = session.run([self.z], feed_dict={self.x: obs})
+        z = session.run([self.z], feed_dict={self.x: obs.reshape(1,image_h, image_w, 1)})
+        z = np.ravel(z)
         return z
 
 

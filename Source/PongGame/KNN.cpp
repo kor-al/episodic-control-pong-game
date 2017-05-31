@@ -15,8 +15,8 @@ KNN::KNN(int cap, int dim)
 	time = 0;
 	states = cv::Mat(capacity, dim, CV_32FC1, float(0));
 	q_values.resize(capacity, 0);
-	LRUs.resize(capacity,0);
-	
+	LRUs.resize(capacity, 0);
+
 }
 
 float KNN::knn_value(cv::Mat key, int knn)//single query
@@ -46,7 +46,7 @@ float KNN::knn_value(cv::Mat key, int knn)//single query
 
 void KNN::add(cv::Mat key, float value)
 {
-	if (current_capacity>=capacity)
+	if (current_capacity >= capacity)
 	{
 		int old_ind = std::min_element(LRUs.begin(), LRUs.end()) - LRUs.begin();
 		key.row(0).copyTo(states.row(old_ind));
@@ -80,7 +80,7 @@ bool KNN::peek(cv::Mat key, float value, bool bModify, float* result_qval)
 
 	std::vector<int> index(knn);
 	std::vector<float> dist(knn);
-	
+
 	//cv::flann::Index kdtree(states.rowRange(0, current_capacity), cv::flann::KDTreeIndexParams(4));
 	kdtree.knnSearch(key, index, dist, knn, cv::flann::SearchParams(32));
 	if (dist[0] < eps_dist)
@@ -94,14 +94,14 @@ bool KNN::peek(cv::Mat key, float value, bool bModify, float* result_qval)
 		return true;
 	}
 	return false;
-	
+
 
 }
 
 KNN::~KNN()
 {
 }
- 
+
 
 
 void KNN::saveIndex(std::string filename) const

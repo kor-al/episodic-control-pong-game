@@ -107,8 +107,8 @@ Global
 		{9E513F76-9130-442D-B039-8DB1DA26DB31}.Shipping|IOS.Build.0 = IOS_Shipping_Game|Win32
 		{9E513F76-9130-442D-B039-8DB1DA26DB31}.Shipping|Win32.ActiveCfg = Shipping_Game|Win32
 		{9E513F76-9130-442D-B039-8DB1DA26DB31}.Shipping|Win32.Build.0 = Shipping_Game|Win32
-		{9E513F76-9130-442D-B039-8DB1DA26DB31}.Shipping|Win64.ActiveCfg = Shipping_Game|x64
-		{9E513F76-9130-442D-B039-8DB1DA26DB31}.Shipping|Win64.Build.0 = Shipping_Game|x64
+		{9E513F76-9130-442D-B039-8DB1DA26DB31}.Shipping|Win64.ActiveCfg = DebugGame_Game|x64
+		{9E513F76-9130-442D-B039-8DB1DA26DB31}.Shipping|Win64.Build.0 = DebugGame_Game|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

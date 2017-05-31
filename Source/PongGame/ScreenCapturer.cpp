@@ -8,7 +8,6 @@
 #include "Runtime/RenderCore/Public/RenderingThread.h"
 
 
-
 // Sets default values
 AScreenCapturer::AScreenCapturer()
 {
@@ -18,6 +17,7 @@ AScreenCapturer::AScreenCapturer()
 	ScreenshotTimer = 0.0;
 	Height = 0;
 	Width = 0;
+	State.Init(0.0, kStateDim);
 }
 
 // Called when the game starts or when spawned
@@ -89,7 +89,7 @@ bool AScreenCapturer::CaptureScreenshot(TArray<uint8>* data)
 	if (bScreenshotSuccessful) {
 		if (Bitmap.Num() != X * Y) {
 			UE_LOG(LogTemp, Warning,
-				TEXT("Screenshot bitmap had the wrong number of elements: %d"),
+				TEXT("Screenshot bitmap had the wrong number of elements: %f"),
 				Bitmap.Num());
 			return false;
 		}

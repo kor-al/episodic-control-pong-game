@@ -18,6 +18,8 @@ class VAETrainer(object):
         os.makedirs(summary_dir, exist_ok=True)
         self.summary_writer = tf.summary.FileWriter(summary_dir)
         self.summary_output = open(os.path.join(experiment_path, "log.txt"), "a")
+		#save elbo
+        self.objective_output = open(os.path.join(experiment_path, "elbo.txt"), "a")
 
         self.batch_size = config["batch_size"]
         self.latent_dim = config["latent_dim"]
@@ -26,7 +28,7 @@ class VAETrainer(object):
         self.memory = ExperienceMemory(config["memory_size"])
 
         # Create agent for training
-        self.vae=VAE(self.latent_dim)
+        self.vae = VAE(self.latent_dim)
         # Tools for saving and loading networks
         self.saver = tf.train.Saver()
 
@@ -70,6 +72,11 @@ class VAETrainer(object):
 
             self.summary_output.write(message)
             self.summary_output.flush()
+
+            #---print elbo
+            message_obj = "{} {}\n".format(self.frames_count, self.memory.current_elbo)
+            self.objective_output.write(message_obj)
+            self.objective_output.flush()
 
             if summaries is not None:
                 self.summary_writer.add_summary(summaries)

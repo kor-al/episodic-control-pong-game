@@ -5,8 +5,8 @@
 #include "KNN.h"
 
 /**
- * 
- */
+*
+*/
 class PONGGAME_API QECtable
 {
 private:
@@ -14,6 +14,7 @@ private:
 	std::vector<KNN> ec_buffer;
 	int buffer_maxsize;
 	cv::Mat matrix_proj;
+	bool bEmbedding;
 
 	//xml achive
 	//friend class boost::serialization::access;
@@ -43,7 +44,7 @@ public:
 	cv::Mat fprojection(cv::Mat observation);
 	float estimate(cv::Mat observation, int action);
 	void update(cv::Mat observation, int action, float value);
-	QECtable(int knn, int dim_state, int dim_observation, int buffer_maxsize, int num_action);
+	QECtable(int knn, int dim_state, int dim_observation, int buffer_maxsize, int num_action, bool embedding = 0);
 	QECtable();
 	~QECtable();
 	void load_kdtrees(std::string filename);

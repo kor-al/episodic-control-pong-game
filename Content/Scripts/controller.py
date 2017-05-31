@@ -5,15 +5,14 @@ import logging
 from trainer import VAETrainer
 import numpy as np
 
-from unreal_engine.classes import ActorComponent, ForceFeedbackEffect, KismetSystemLibrary
 
-
+path = "D:/Alice/Documents/HSE/masters"
 # Experiment description.
 GAME = "pong"
 MODEL = "EC"
 VERSION = 0  # Bump this for each new experiment.
 
-EXPERIMENT_PATH = os.path.join("/experiment/acid", GAME, MODEL, str(VERSION))
+EXPERIMENT_PATH = os.path.join(path,"/experiment", GAME, MODEL, str(VERSION))
 MODEL_PATH = os.path.join(EXPERIMENT_PATH, "checkpoints")
 LOG_PATH = os.path.join(EXPERIMENT_PATH, "logs")
 SNAPSHOT_PERIOD = 10000  # periodicity of saving current model
@@ -22,7 +21,7 @@ config = {
 	"batch_size": 100,  # size of minibatch
 	"experiment_path": EXPERIMENT_PATH,
 	"latent_dim": 32,
-	"log_period": 1000,
+	"log_period": 100,
 	"memory_size": 100000,
 	"image_h": 84,
 	"image_w": 84,
@@ -35,9 +34,9 @@ class PythonVAEController(object):
 	
 	def __init__(self):
 		self.trainer = VAETrainer(config)
-	
+
 	def begin_play(self):
-		ue.log("Begin Play on PythonAIController class")
+		#ue.log("Begin Play on PythonAIController class")
 		self.step_count = 0
 		self.trainer.init_training()
 		self.trainer.load_model(MODEL_PATH)
@@ -51,35 +50,39 @@ class PythonVAEController(object):
 			return None
 		return np.array(screen).reshape((self.image_h, self.image_w, 1), order='F')
 
+	def set_state(self, state):
+		screen_capturer = self.uobject.get_property('ScreenCapturer_Ref')
+		screen_capturer.State = state.tolist()
+
 	def tick(self, delta_time):
-		ue.log("Tick on Pycontroller")
+		#ue.log("Tick on Pycontroller")
 		start_time = time.clock()
 
 		screen = self.get_screen()
 
         # Skip frames when no screen is available.
-		if screen is None or len(screen) == 0:
-			ue.log("zero screen")
+		if screen is None:
 			return
 
 		if self.step_count < self.max_frames:
 			
-			self.trainer.process_frame(screen)
+			state = self.trainer.process_frame(screen)
 
 			self.step_count += 1
 
 			if self.step_count % SNAPSHOT_PERIOD == 0:
+				ue.log("Saving model...")
 				self.trainer.save_model(MODEL_PATH)
 
             # Log elapsed time.
 			finish_time = time.clock()
 			elapsed = finish_time - start_time
 
-		else:
-			state = self.trainer.get_state(screen)
+		state = self.trainer.get_state(screen)
+		self.set_state(state)
 
         # Log elapsed time.
 		finish_time = time.clock()
 		elapsed = finish_time - start_time
 
-		#return state
+	

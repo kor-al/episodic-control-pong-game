@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 
@@ -27,8 +25,8 @@
 
 
 /**
- * 
- */
+*
+*/
 class PONGGAME_API KNN
 {
 private:
@@ -50,22 +48,22 @@ private:
 	template<class Archive>
 	void save(Archive & ar, const unsigned int version) const
 	{
-		ar & BOOST_SERIALIZATION_NVP(capacity);
-		ar & BOOST_SERIALIZATION_NVP(current_capacity);
-		ar & BOOST_SERIALIZATION_NVP(q_values);
-		ar & BOOST_SERIALIZATION_NVP(LRUs);
-		ar & BOOST_SERIALIZATION_NVP(time);
-		ar & BOOST_SERIALIZATION_NVP(states);
+	ar & BOOST_SERIALIZATION_NVP(capacity);
+	ar & BOOST_SERIALIZATION_NVP(current_capacity);
+	ar & BOOST_SERIALIZATION_NVP(q_values);
+	ar & BOOST_SERIALIZATION_NVP(LRUs);
+	ar & BOOST_SERIALIZATION_NVP(time);
+	ar & BOOST_SERIALIZATION_NVP(states);
 	}
 	template<class Archive>
 	void load(Archive & ar, const unsigned int version)
 	{
-		ar & BOOST_SERIALIZATION_NVP(capacity);
-		ar & BOOST_SERIALIZATION_NVP(current_capacity);
-		ar & BOOST_SERIALIZATION_NVP(q_values);
-		ar & BOOST_SERIALIZATION_NVP(LRUs);
-		ar & BOOST_SERIALIZATION_NVP(time);
-		ar & BOOST_SERIALIZATION_NVP(states);
+	ar & BOOST_SERIALIZATION_NVP(capacity);
+	ar & BOOST_SERIALIZATION_NVP(current_capacity);
+	ar & BOOST_SERIALIZATION_NVP(q_values);
+	ar & BOOST_SERIALIZATION_NVP(LRUs);
+	ar & BOOST_SERIALIZATION_NVP(time);
+	ar & BOOST_SERIALIZATION_NVP(states);
 	}
 	BOOST_SERIALIZATION_SPLIT_MEMBER()*/
 
@@ -107,4 +105,3 @@ public:
 	KNN(int capacity, int dim);
 	~KNN();
 };
-

@@ -1,5 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #include "PongGame.h"
 #include "AIPaddleController.h"
 #include "Pong_GameMode.h"
@@ -19,7 +18,7 @@ AAIPaddleController::AAIPaddleController()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	bFirstTick = true;
-	UE_LOG(LogTemp, Warning, TEXT("AI controller Constructor"))
+	UE_LOG(LogTemp, Warning, TEXT("AI controller Constructor"));
 }
 
 void  AAIPaddleController::BeginPlay()
@@ -27,8 +26,9 @@ void  AAIPaddleController::BeginPlay()
 	cv::setBreakOnError(true);
 	Super::BeginPlay();
 	step_count = 0;
+	total_frames_count = 0;
 	UE_LOG(LogTemp, Warning, TEXT("AI controller BeginPlay"));
-	agent.loadQECtable();
+	//agent.loadQECtable();
 }
 
 void AAIPaddleController::Tick(float DeltaSeconds)
@@ -44,6 +44,8 @@ void AAIPaddleController::Tick(float DeltaSeconds)
 
 	int reward = current_score.update(sc);
 	cv::Mat screen = get_screen(game_mode);
+	bool *bLearningMode = &game_mode->ScreenCapturer->bLearningMode;
+	int NumLearningFrames =  game_mode->ScreenCapturer->NumLearningFrames;
 
 	//float ball_position = get_ball_position(game_mode);
 	//float pawn_position = ((APawn*)paddle)->GetActorLocation().Z;
@@ -57,7 +59,8 @@ void AAIPaddleController::Tick(float DeltaSeconds)
 	cv::Mat screen_t = transform_image(screen);
 	UE_LOG(LogTemp, Warning, TEXT("____reward = %i"), reward);
 
-	if (reward)
+
+	if (!*bLearningMode && reward)
 	{
 		agent.end_episode(reward);
 		bFirstTick = true;
@@ -68,7 +71,10 @@ void AAIPaddleController::Tick(float DeltaSeconds)
 	if (step_count%kFrameSkip) //add skipped frames into one frame to process (while the last action is repeated)
 	{
 		if (step_count == 1)
+		{
+			game_mode->ScreenCapturer->MergedScreenshot.Empty();
 			screen_t.copyTo(accum_obs);
+		}
 		else
 		{
 			cv::addWeighted(screen_t, 1, accum_obs, 1, 0, accum_obs);
@@ -80,22 +86,43 @@ void AAIPaddleController::Tick(float DeltaSeconds)
 		step_count = 0;
 
 		//cv::imwrite("D:/Alice/Documents/HSE/masters/observations/" + std::to_string(total_frames_count) + ".png", accum_obs);
+		assign_accum_screen(game_mode, accum_obs);
 
 		total_frames_count++;
 
-		if (bFirstTick)
+		if (*bLearningMode)
 		{
-			action = agent.start_episode(accum_obs);
-			bFirstTick = false;
+			action = agent.random_action();
+			if (total_frames_count > NumLearningFrames)
+			{
+				//stop learning
+				*bLearningMode = false;
+			}
 		}
 		else
 		{
-			action = agent.step(accum_obs, reward);
+			cv::Mat* obs;
+
+			if (bEmbedding)
+			{
+				cv::Mat state = tarray2cvmat(game_mode->ScreenCapturer->State);
+				obs = &state;
+			}
+			else
+				obs = &accum_obs;
+
+			if (bFirstTick)
+			{
+				action = agent.start_episode(*obs);
+				bFirstTick = false;
+			}
+			else
+			{
+				action = agent.step(*obs, reward);
+			}
 		}
+
 	}
-
-
-
 
 	UE_LOG(LogTemp, Warning, TEXT("____action = %i"), action);
 	paddle->MovementDirection = get_action_direction(action);
@@ -131,12 +158,23 @@ cv::Mat AAIPaddleController::get_screen(class APong_GameMode*game_mode)
 	cv::Mat chan[3] = {
 		cv::Mat(W,H,CV_8U, values),
 		cv::Mat(W,H,CV_8U, values + H*W),
-		cv::Mat(W,H,CV_8U, values + 2*H*W)
+		cv::Mat(W,H,CV_8U, values + 2 * H*W)
 	};
 	cv::Mat merged;
 	cv::merge(chan, 3, merged);
 	return merged;
-}  
+}
+
+cv::Mat AAIPaddleController::tarray2cvmat(TArray<float> a)
+{
+	float* values = a.GetData();
+	return cv::Mat(1, a.Num(), CV_32FC1, values);
+}
+
+void AAIPaddleController::assign_accum_screen(class APong_GameMode*game_mode, cv::Mat mat)
+{
+	cvMat2tarray(mat, game_mode->ScreenCapturer->MergedScreenshot);
+}
 
 Score AAIPaddleController::get_score(class APong_GameMode*game_mode)
 {
@@ -175,4 +213,12 @@ cv::Mat AAIPaddleController::transform_image(cv::Mat screen)
 	//cv::normalize(screen, screen, 1, 0, cv::NORM_MINMAX); [0,1] in matrix , if commented [0,255]
 	screen.convertTo(screen, CV_32FC1);
 	return screen;
+}
+
+void AAIPaddleController::cvMat2tarray(cv::Mat mat, TArray<uint8>& a)
+{
+	a.Empty();
+	for (int i = 0; i < mat.rows; ++i) {
+		a.Append(mat.ptr<uint8>(i), mat.cols);
+	}
 }
