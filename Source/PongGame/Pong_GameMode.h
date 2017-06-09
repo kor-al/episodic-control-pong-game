@@ -30,4 +30,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "screenshots")
 	int Frame_Counter;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "game")
+	bool isVAE;
+
 };

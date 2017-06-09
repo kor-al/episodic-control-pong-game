@@ -42,11 +42,13 @@ cv::Mat QECtable::fprojection(cv::Mat observation)
 	}
 }
 
-float QECtable::estimate(cv::Mat observation, int action)
+float QECtable::estimate(cv::Mat observation, int action, cv::Mat s)
 {
 	bool bStatePresent = 0;
 	float estimated_qvalue = 0;
-	cv::Mat state = fprojection(observation);
+	cv::Mat state = s.clone();
+	if (!bEmbedding)
+		state = fprojection(observation);
 	bStatePresent = ec_buffer[action].peek(state, 0, false, &estimated_qvalue);
 	if (bStatePresent)
 	{
@@ -59,11 +61,14 @@ float QECtable::estimate(cv::Mat observation, int action)
 			return ec_buffer[action].knn_value(state, knn);
 	}
 }
-void QECtable::update(cv::Mat observation, int action, float value)
+void QECtable::update(cv::Mat observation, int action, float value, cv::Mat s)
 {
-	cv::Mat state = fprojection(observation);
+	cv::Mat state = s.clone();
+	if (!bEmbedding)
+		state = fprojection(observation);
 	float estimated_qvalue;
 	bool bStatePresent = ec_buffer[action].peek(state, value, true, &estimated_qvalue);
+	UE_LOG(LogTemp, Warning, TEXT("update QEC state r = %u, c = %u"), state.rows, state.cols);
 	if (!bStatePresent)
 		ec_buffer[action].add(state, value);
 }

@@ -26,7 +26,6 @@ void  AAIPaddleController::BeginPlay()
 	cv::setBreakOnError(true);
 	Super::BeginPlay();
 	step_count = 0;
-	total_frames_count = 0;
 	UE_LOG(LogTemp, Warning, TEXT("AI controller BeginPlay"));
 	//agent.loadQECtable();
 }
@@ -45,7 +44,7 @@ void AAIPaddleController::Tick(float DeltaSeconds)
 	int reward = current_score.update(sc);
 	cv::Mat screen = get_screen(game_mode);
 	bool *bLearningMode = &game_mode->ScreenCapturer->bLearningMode;
-	int NumLearningFrames =  game_mode->ScreenCapturer->NumLearningFrames;
+	bEmbedding = game_mode->isVAE;
 
 	//float ball_position = get_ball_position(game_mode);
 	//float pawn_position = ((APawn*)paddle)->GetActorLocation().Z;
@@ -88,37 +87,28 @@ void AAIPaddleController::Tick(float DeltaSeconds)
 		//cv::imwrite("D:/Alice/Documents/HSE/masters/observations/" + std::to_string(total_frames_count) + ".png", accum_obs);
 		assign_accum_screen(game_mode, accum_obs);
 
-		total_frames_count++;
 
 		if (*bLearningMode)
 		{
 			action = agent.random_action();
-			if (total_frames_count > NumLearningFrames)
-			{
-				//stop learning
-				*bLearningMode = false;
-			}
 		}
 		else
 		{
-			cv::Mat* obs;
+			cv::Mat state = cv::Mat(0, 0, CV_32F);
 
 			if (bEmbedding)
 			{
-				cv::Mat state = tarray2cvmat(game_mode->ScreenCapturer->State);
-				obs = &state;
+				state = tarray2cvmat(game_mode->ScreenCapturer->State);
 			}
-			else
-				obs = &accum_obs;
 
 			if (bFirstTick)
 			{
-				action = agent.start_episode(*obs);
+				action = agent.start_episode(accum_obs, state);
 				bFirstTick = false;
 			}
 			else
 			{
-				action = agent.step(*obs, reward);
+				action = agent.step(accum_obs, reward, state);
 			}
 		}
 
@@ -168,7 +158,7 @@ cv::Mat AAIPaddleController::get_screen(class APong_GameMode*game_mode)
 cv::Mat AAIPaddleController::tarray2cvmat(TArray<float> a)
 {
 	float* values = a.GetData();
-	return cv::Mat(1, a.Num(), CV_32FC1, values);
+	return cv::Mat(1, a.Num(), CV_32FC1, values).clone();
 }
 
 void AAIPaddleController::assign_accum_screen(class APong_GameMode*game_mode, cv::Mat mat)

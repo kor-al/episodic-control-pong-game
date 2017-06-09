@@ -42,8 +42,8 @@ private:
 public:
 	float eps; // to serialize with QEC table
 	cv::Mat fprojection(cv::Mat observation);
-	float estimate(cv::Mat observation, int action);
-	void update(cv::Mat observation, int action, float value);
+	float estimate(cv::Mat observation, int action, cv::Mat state = cv::Mat(0, 0, CV_32F));
+	void update(cv::Mat observation, int action, float value, cv::Mat state = cv::Mat(0, 0, CV_32F));
 	QECtable(int knn, int dim_state, int dim_observation, int buffer_maxsize, int num_action, bool embedding = 0);
 	QECtable();
 	~QECtable();

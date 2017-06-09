@@ -21,7 +21,8 @@ class PONGGAME_API AAIPaddleController : public AAIController
 public:
 	static const int kFrameSkip = 5; //better than 4
 	static const int kTransformedImageDim = 84;
-	static const bool bEmbedding = 1; //0 == random projection, 1 == VAE
+	
+	bool bEmbedding; //0 == random projection, 1 == VAE
 
 	// Sets default values for this actor's properties
 	AAIPaddleController();
@@ -38,7 +39,6 @@ public:
 
 	int step_count; // to skip frames
 	//to save observation with number and stop learning phase
-	int total_frames_count;
 
 	int last_action;
 

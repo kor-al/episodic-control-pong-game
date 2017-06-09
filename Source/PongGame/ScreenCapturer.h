@@ -47,19 +47,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = Mode)
 		bool bLearningMode;
 
-	UPROPERTY(EditAnywhere, Category = Mode)
-		int NumLearningFrames;
-
-
-	//UFUNCTION(BlueprintCallable, Category = "Python")
-	//	void SetState(const TArray<float> s)
-	//	{
-	//		for (int i = 0; i < State.Num(); i++)
-	//			State[i] = s[i];
-	//	}
-
-	
-
 private:
 	bool CaptureScreenshot(TArray<uint8>* data);
 

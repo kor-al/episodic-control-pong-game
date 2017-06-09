@@ -42,17 +42,16 @@ class PythonVAEController(object):
 		self.trainer.load_model(MODEL_PATH)
 		self.image_h, self.image_w = config["image_h"], config["image_w"]
 		self.max_frames = config["max_frames"]
+		self.screen_capturer = self.uobject.get_property('ScreenCapturer_Ref')
 
 	def get_screen(self):
-		screen_capturer = self.uobject.get_property('ScreenCapturer_Ref')
-		screen = screen_capturer.MergedScreenshot
+		screen = self.screen_capturer.MergedScreenshot
 		if len(screen) == 0:
 			return None
 		return np.array(screen).reshape((self.image_h, self.image_w, 1), order='F')
 
 	def set_state(self, state):
-		screen_capturer = self.uobject.get_property('ScreenCapturer_Ref')
-		screen_capturer.State = state.tolist()
+		self.screen_capturer.State = state.tolist()
 
 	def tick(self, delta_time):
 		#ue.log("Tick on Pycontroller")
@@ -64,7 +63,7 @@ class PythonVAEController(object):
 		if screen is None:
 			return
 
-		if self.step_count < self.max_frames:
+		if self.screen_capturer.bLearningMode and self.step_count < self.max_frames:
 			
 			state = self.trainer.process_frame(screen)
 
@@ -77,6 +76,9 @@ class PythonVAEController(object):
             # Log elapsed time.
 			finish_time = time.clock()
 			elapsed = finish_time - start_time
+
+		elif  self.step_count == self.max_frames:
+			self.screen_capturer.bLearningMode = False
 
 		state = self.trainer.get_state(screen)
 		self.set_state(state)

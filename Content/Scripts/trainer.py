@@ -18,8 +18,6 @@ class VAETrainer(object):
         os.makedirs(summary_dir, exist_ok=True)
         self.summary_writer = tf.summary.FileWriter(summary_dir)
         self.summary_output = open(os.path.join(experiment_path, "log.txt"), "a")
-		#save elbo
-        self.objective_output = open(os.path.join(experiment_path, "elbo.txt"), "a")
 
         self.batch_size = config["batch_size"]
         self.latent_dim = config["latent_dim"]
@@ -32,11 +30,13 @@ class VAETrainer(object):
         # Tools for saving and loading networks
         self.saver = tf.train.Saver()
 
-        self.frames_count = 0
+        self.step = tf.Variable(0, name="step")
+        self.increment_step = self.step.assign_add(1)
 
     def init_training(self):
         # Initialize training parameters
         self.session.run(tf.global_variables_initializer())
+        self.t = self.step.eval(self.session) #frames count
 
 
     def load_model(self, path):
@@ -65,23 +65,20 @@ class VAETrainer(object):
         summaries, loss, z = self.make_train_step(screen)
         self.memory.current_elbo = loss
 
+        # update the old values
+        self.t = self.session.run(self.increment_step)
+
         # print info
-        if self.frames_count % self.log_period == 0:
+        if self.t % self.log_period == 0:
             now_string = datetime.datetime.now().strftime("%Y.%m.%d_%H:%M:%S")
-            message = "TIME {}, FRAMES {}, ELBO {}\n".format(now_string, self.frames_count, self.memory.current_elbo)
+            message = "TIME {}, FRAMES {}, ELBO {}\n".format(now_string, self.t, self.memory.current_elbo)
 
             self.summary_output.write(message)
             self.summary_output.flush()
 
-            #---print elbo
-            message_obj = "{} {}\n".format(self.frames_count, self.memory.current_elbo)
-            self.objective_output.write(message_obj)
-            self.objective_output.flush()
 
             if summaries is not None:
-                self.summary_writer.add_summary(summaries)
-
-        self.frames_count += 1
+                self.summary_writer.add_summary(summaries, self.t)
 
         return z
 

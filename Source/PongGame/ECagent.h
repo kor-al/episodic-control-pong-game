@@ -15,7 +15,7 @@ class PONGGAME_API ECagent
 {
 private:
 	static const int  kKnn = 11;
-	static const int kDimState = 64;
+	static const int kDimState = 32; //VAE use 32
 	static const int kBufferMaxsize = 1000000;
 	static const float kEpsMax;
 	static const float kEpsMin;
@@ -47,11 +47,12 @@ private:
 
 	cv::Mat last_observation;
 	int last_action;
+	cv::Mat last_state;
 
 public:
-	int start_episode(cv::Mat observation);
-	int step(cv::Mat observation, int reward);
-	int choose_action(cv::Mat observation, int reward);
+	int start_episode(cv::Mat observation, cv::Mat state = cv::Mat(0, 0, CV_32F));
+	int step(cv::Mat observation, int reward , cv::Mat state = cv::Mat(0, 0, CV_32F));
+	int choose_action(cv::Mat observation, int reward, cv::Mat state = cv::Mat(0,0,CV_32F));
 	int random_action();
 	void end_episode(int reward, bool bTerminal = true);
 

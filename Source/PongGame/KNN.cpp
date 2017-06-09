@@ -46,6 +46,9 @@ float KNN::knn_value(cv::Mat key, int knn)//single query
 
 void KNN::add(cv::Mat key, float value)
 {
+	UE_LOG(LogTemp, Warning, TEXT("key r = %u, c = %u"), key.rows, key.cols);
+	UE_LOG(LogTemp, Warning, TEXT("states r = %u, c = %u"), states.rows, states.cols);
+
 	if (current_capacity >= capacity)
 	{
 		int old_ind = std::min_element(LRUs.begin(), LRUs.end()) - LRUs.begin();

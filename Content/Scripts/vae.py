@@ -39,8 +39,7 @@ def inference_network(latent_dim):
   # The standard deviation must be positive. Parametrize with a softplus and
   # add a small epsilon for numerical stability
   sigma = 1e-6 + tf.nn.softplus(gaussian_params[:, latent_dim:])
-  sigma = tf.sqrt(tf.exp(sigma))
-   # encoder output log(sigma**2) (its domain is -inf, inf)
+  #???  encoder output log(sigma**2) (its domain is -inf, inf)
   return x, mu, sigma
 
 
@@ -71,7 +70,7 @@ def generative_network(z):
   # add a small epsilon for numerical stability
   sigma = 1e-6 + tf.nn.softplus(gaussian_params[:,:,:,1])
   sigma = tf.reshape(sigma,[-1, image_h, image_w, 1])
-  sigma = tf.sqrt(tf.exp(sigma))
+  #sigma = tf.sqrt(tf.exp(sigma))
   return mu, sigma
 
 
@@ -79,18 +78,22 @@ class VAE(object):
     def __init__(self, latent_dim):
         # x is an observsation batch
         self.n_samples = 1
-        with tf.variable_scope('model'):
+        with tf.variable_scope('variational'):
             self.x, self.q_mu, self.q_sigma = inference_network(latent_dim)
-            self.q_z = st.StochasticTensor(distributions.Normal(loc=self.q_mu, scale =self.q_sigma))
+            with st.value_type(st.SampleValue()):
+                self.q_z = st.StochasticTensor(distributions.Normal(loc=self.q_mu, scale =self.q_sigma))
+
+        with tf.variable_scope('model'):
             self.p_x_given_z_mu, self.p_x_given_z_sigma  = generative_network(z=self.q_z)
+            self.p_x_given_z = distributions.Normal(loc=self.p_x_given_z_mu, scale = self.p_x_given_z_sigma)
             self.z = self.q_z.distribution.sample(self.n_samples)#prior z
+            
+            tf.summary.image('posterior_predictive',tf.cast(self.p_x_given_z.sample(), tf.float32))
 
         with tf.variable_scope('model', reuse=True):
-            self.p_x_given_z = distributions.Normal(loc=self.p_x_given_z_mu, scale = self.p_x_given_z_sigma)
             self.p_z = distributions.Normal(loc=np.zeros(latent_dim, dtype=np.float32), scale =np.ones(latent_dim, dtype=np.float32))
 
         # Define the loss function.
-
         self.kl = tf.reduce_sum(distributions.kl(self.q_z.distribution, self.p_z), 1)
         self.expected_log_likelihood = tf.reduce_sum(self.p_x_given_z.log_prob(self.x), [1, 2, 3])
         self.elbo = tf.reduce_sum(self.expected_log_likelihood - self.kl, 0)
