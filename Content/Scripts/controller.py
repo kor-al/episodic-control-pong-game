@@ -83,8 +83,4 @@ class PythonVAEController(object):
 		state = self.trainer.get_state(screen)
 		self.set_state(state)
 
-        # Log elapsed time.
-		finish_time = time.clock()
-		elapsed = finish_time - start_time
-
 	
