@@ -18,7 +18,7 @@ def inference_network(latent_dim):
     sigma: Standard deviation parameters for the variational family Normal
   """
   x = tf.placeholder(tf.float32, [None, image_h, image_w, 1])
-  tf.summary.image('data', x)
+  tf.summary.image('data', tf.cast(x, tf.float32))
 
   kernels = [32, 32, 64, 64]
   kernel_sizes = [4, 5, 5, 4]
@@ -51,8 +51,8 @@ def generative_network(z):
     mu: Mean parameters for the Normal likelihood of the data
     sigma: Standard deviation parameters for the Normal likelihood of the data
   """
-  net = slim.fully_connected(z, 576, activation_fn=tf.nn.relu)
-  net = tf.reshape(net, [-1,3, 3,64])
+  net = slim.fully_connected(z, 3* 3*32, activation_fn=tf.nn.relu)
+  net = tf.reshape(net, [-1,3, 3,32])
 
   kernels = [64, 64, 32, 32 ]
   kernel_sizes = [4, 5, 5, 4]
@@ -60,32 +60,32 @@ def generative_network(z):
 
   with slim.arg_scope([slim.convolution2d_transpose], activation_fn=tf.nn.relu, padding = "VALID"):
     for i in range(0,4):
-        net = slim.conv2d_transpose(net, kernels[i], kernel_size = kernel_sizes[i],stride = kernel_strides[i])
-    gaussian_params = slim.conv2d_transpose(net, 2, 1, scope='output')
+          net = slim.conv2d_transpose(net, kernels[i], kernel_size = kernel_sizes[i],stride = kernel_strides[i])
 
-  # The mean parameter is unconstrained
-  mu = gaussian_params[:, :,:, 0]
-  mu = tf.reshape(mu,[-1, image_h, image_w, 1])
-  # The standard deviation must be positive. Parametrize with a softplus and
-  # add a small epsilon for numerical stability
-  sigma = 1e-6 + tf.nn.softplus(gaussian_params[:,:,:,1])
-  sigma = tf.reshape(sigma,[-1, image_h, image_w, 1])
-  #sigma = tf.sqrt(tf.exp(sigma))
-  return mu, sigma
+  net = slim.conv2d_transpose(net, 1, 5, stride=1, activation_fn=None, scope='output')
+  print(net.shape)
+
+  bernoulli_logits = tf.reshape(net, [-1, image_h, image_w, 1])
+
+  return bernoulli_logits
 
 
 class VAE(object):
-    def __init__(self, latent_dim):
+    def __init__(self, latent_dim, batch_size):
         # x is an observsation batch
         self.n_samples = 1
+        self.batch_size = batch_size 
+
         with tf.variable_scope('variational'):
             self.x, self.q_mu, self.q_sigma = inference_network(latent_dim)
             with st.value_type(st.SampleValue()):
                 self.q_z = st.StochasticTensor(distributions.Normal(loc=self.q_mu, scale =self.q_sigma))
 
         with tf.variable_scope('model'):
-            self.p_x_given_z_mu, self.p_x_given_z_sigma  = generative_network(z=self.q_z)
-            self.p_x_given_z = distributions.Normal(loc=self.p_x_given_z_mu, scale = self.p_x_given_z_sigma)
+            #self.p_x_given_z_mu, self.p_x_given_z_sigma  = generative_network(z=self.q_z)
+            self.p_x_given_z_logits  = generative_network(z=self.q_z)
+            #self.p_x_given_z = distributions.Normal(loc=self.p_x_given_z_mu, scale = self.p_x_given_z_sigma)
+            self.p_x_given_z = distributions.Bernoulli(logits=self.p_x_given_z_logits)
             self.z = self.q_z.distribution.sample(self.n_samples)#prior z
             
             tf.summary.image('posterior_predictive',tf.cast(self.p_x_given_z.sample(), tf.float32))
@@ -100,7 +100,7 @@ class VAE(object):
         optimizer = tf.train.RMSPropOptimizer(learning_rate=1e-5)
         self.train_step = optimizer.minimize(-self.elbo)
 
-        tf.summary.scalar("elbo", self.elbo)
+        tf.summary.scalar("elbo", self.elbo/self.batch_size)
         self.summaries = tf.summary.merge_all()
 
     def get_state(self, session, obs):

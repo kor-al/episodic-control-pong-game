@@ -4,7 +4,7 @@ import os
 import logging
 from trainer import VAETrainer
 import numpy as np
-
+from PIL import Image
 
 path = "D:/Alice/Documents/HSE/masters"
 # Experiment description.
@@ -25,7 +25,7 @@ config = {
 	"memory_size": 100000,
 	"image_h": 84,
 	"image_w": 84,
-	"max_frames": 50000
+	"max_frames": 70000
 }
 
 
@@ -34,12 +34,13 @@ class PythonVAEController(object):
 	
 	def __init__(self):
 		self.trainer = VAETrainer(config)
+		self.step_count = 0
 
 	def begin_play(self):
-		#ue.log("Begin Play on PythonAIController class")
-		self.step_count = 0
+		ue.log("Begin Play on PythonAIController class")
 		self.trainer.init_training()
 		self.trainer.load_model(MODEL_PATH)
+
 		self.image_h, self.image_w = config["image_h"], config["image_w"]
 		self.max_frames = config["max_frames"]
 		self.screen_capturer = self.uobject.get_property('ScreenCapturer_Ref')
@@ -48,7 +49,7 @@ class PythonVAEController(object):
 		screen = self.screen_capturer.MergedScreenshot
 		if len(screen) == 0:
 			return None
-		return np.array(screen).reshape((self.image_h, self.image_w, 1), order='F')
+		return np.array(screen, dtype=np.uint8).reshape((self.image_h, self.image_w,1), order = 'F').swapaxes(0, 1)
 
 	def set_state(self, state):
 		self.screen_capturer.State = state.tolist()
@@ -62,6 +63,9 @@ class PythonVAEController(object):
         # Skip frames when no screen is available.
 		if screen is None:
 			return
+		
+		#im = Image.fromarray(screen.reshape(self.image_h, self.image_w), 'L')
+		#im.save("D:/your_file.png")
 
 		if self.screen_capturer.bLearningMode and self.step_count < self.max_frames:
 			

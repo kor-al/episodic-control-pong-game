@@ -26,7 +26,7 @@ class VAETrainer(object):
         self.memory = ExperienceMemory(config["memory_size"])
 
         # Create agent for training
-        self.vae = VAE(self.latent_dim)
+        self.vae = VAE(self.latent_dim, self.batch_size)
         # Tools for saving and loading networks
         self.saver = tf.train.Saver()
 
@@ -54,7 +54,7 @@ class VAETrainer(object):
 
     def make_train_step(self, obs):
         # sample a minibatch to train on
-        minibatch = list(self.memory.sample(self.batch_size))
+        minibatch = (np.array(self.memory.sample(self.batch_size))>0.5).astype(np.float32)
         return self.vae.train(self.session, minibatch)
 
     def process_frame(self, screen):
@@ -62,8 +62,8 @@ class VAETrainer(object):
         # store the transition in memory
         self.memory.add_experience(screen)
 
-        summaries, loss, z = self.make_train_step(screen)
-        self.memory.current_elbo = loss
+        summaries, elbo, z = self.make_train_step(screen)
+        self.memory.current_elbo = elbo
 
         # update the old values
         self.t = self.session.run(self.increment_step)
