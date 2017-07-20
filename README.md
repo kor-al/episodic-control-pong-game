@@ -21,7 +21,7 @@ A KNN search is implemented using a KDtree from the FLANN library from OpenCV 3.
 A calculated QECtable is saved (serialized) to a .xml archive. This file is quite heavy (~47 MB) but still readable. To decrease its size, a binary archive can be used.
 A small summary is also written to .txt file simultaneously with the archive.
 ### VAE
-A VAE is implemented using the TensorFlow library and the UnrealEnginePython plagin for Unreal Engine 4 (https://github.com/akashin/UnrealEnginePython). Both the encoder and decoder networks are convolutional. The distribution of latent variables is chosen to be Gaussian while the decoder uses Bernoulli distribution since game screenshots are grayscale. 
+A VAE is implemented using the TensorFlow library and the UnrealEnginePython plagin for Unreal Engine 4 (https://github.com/akashin/UnrealEnginePython). The encoder and decoder networks are both convolutional. The distribution of latent variables is chosen to be Gaussian while the decoder uses Bernoulli distribution since game screenshots are grayscale. 
 
 ## Tuning parameters
 * number of neighbors (K - kKNN) [11]
