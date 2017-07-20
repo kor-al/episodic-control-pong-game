@@ -33,6 +33,12 @@ class VAETrainer(object):
         self.step = tf.Variable(0, name="step")
         self.increment_step = self.step.assign_add(1)
 
+        self.newscore = tf.placeholder(tf.int32)
+        self.score = tf.Variable(0, name="score")
+        self.assign_score = tf.assign(self.score, self.newscore);
+        self.summariesScore = tf.summary.scalar("score", tf.cast(self.score, tf.int32))
+        #self.summariesScore = tf.summary.merge_all();
+
     def init_training(self):
         # Initialize training parameters
         self.session.run(tf.global_variables_initializer())
@@ -50,7 +56,7 @@ class VAETrainer(object):
     def save_model(self, path):
         if not os.path.exists(path):
             os.makedirs(path)
-        self.saver.save(self.session, path + "/vae")
+        self.saver.save(self.session, path + "/vae", global_step = self.t)
 
     def make_train_step(self, obs):
         # sample a minibatch to train on
@@ -82,5 +88,12 @@ class VAETrainer(object):
 
         return z
 
-    def get_state(self, screen):
+    def get_state(self, screen, score):
+
+        _ , score_summary, self.t =self.session.run([self.assign_score, self.summariesScore, self.increment_step], feed_dict={self.newscore: score})
+
+        if self.t % self.log_period == 0:
+            if score_summary is not None:
+                self.summary_writer.add_summary(score_summary, self.t)
+
         return self.vae.get_state(self.session, screen)

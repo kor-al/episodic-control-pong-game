@@ -224,7 +224,7 @@ void ECagent::loadQECtable()
 		
 		boost::archive::binary_iarchive ia(file);
 		ia >> qectable;
-		//qectable->load_kdtrees(kKDtreeFilename);
+		qectable->load_kdtrees(kKDtreeFilename);
 		eps = qectable->eps;
 	}
 }

@@ -27,7 +27,7 @@ void  AAIPaddleController::BeginPlay()
 	Super::BeginPlay();
 	step_count = 0;
 	UE_LOG(LogTemp, Warning, TEXT("AI controller BeginPlay"));
-	//agent.loadQECtable();
+	agent.loadQECtable();
 }
 
 void AAIPaddleController::Tick(float DeltaSeconds)
@@ -40,7 +40,6 @@ void AAIPaddleController::Tick(float DeltaSeconds)
 	APaddle* paddle = (APaddle*)GetPawn();
 	APong_GameMode* game_mode = paddle->pGameMode;
 	Score sc = get_score(game_mode);
-
 	int reward = current_score.update(sc);
 	cv::Mat screen = get_screen(game_mode);
 	bool *bLearningMode = &game_mode->ScreenCapturer->bLearningMode;
@@ -57,7 +56,7 @@ void AAIPaddleController::Tick(float DeltaSeconds)
 	step_count++;
 	cv::Mat screen_t = transform_image(screen);
 	UE_LOG(LogTemp, Warning, TEXT("____reward = %i"), reward);
-
+	game_mode->ScreenCapturer->Score += reward;
 
 	if (!*bLearningMode && reward)
 	{
@@ -208,7 +207,9 @@ cv::Mat AAIPaddleController::transform_image(cv::Mat screen)
 void AAIPaddleController::cvMat2tarray(cv::Mat mat, TArray<uint8>& a)
 {
 	a.Empty();
+	mat.convertTo(mat, CV_8UC1);
 	for (int i = 0; i < mat.rows; ++i) {
 		a.Append(mat.ptr<uint8>(i), mat.cols);
 	}
+
 }

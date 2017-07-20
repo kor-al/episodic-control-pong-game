@@ -47,6 +47,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = Mode)
 		bool bLearningMode;
 
+	UPROPERTY(EditAnywhere, Category = Score)
+		int Score;
+
 private:
 	bool CaptureScreenshot(TArray<uint8>* data);
 

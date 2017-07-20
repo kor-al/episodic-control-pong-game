@@ -15,14 +15,14 @@ class PONGGAME_API ECagent
 {
 private:
 	static const int  kKnn = 11;
-	static const int kDimState = 32; //VAE use 32
+	static const int kDimState = 32; //VAE uses 32
 	static const int kBufferMaxsize = 1000000;
 	static const float kEpsMax;
 	static const float kEpsMin;
 	static const int kEpsDenominator = 10000;
 	static const float kECdiscount;
 	static const int kNumActions = 1; //0 or 1 
-	static const int kSaveEpisodes = 1000;
+	static const int kSaveEpisodes = 300;
 	static const std::string kQECtableFilename;
 	static const std::string kSummaryFilename;
 	static const std::string kKDtreeFilename;

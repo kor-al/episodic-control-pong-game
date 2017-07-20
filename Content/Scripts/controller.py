@@ -10,7 +10,7 @@ path = "D:/Alice/Documents/HSE/masters"
 # Experiment description.
 GAME = "pong"
 MODEL = "EC"
-VERSION = 0  # Bump this for each new experiment.
+VERSION = 1  # Bump this for each new experiment.
 
 EXPERIMENT_PATH = os.path.join(path,"/experiment", GAME, MODEL, str(VERSION))
 MODEL_PATH = os.path.join(EXPERIMENT_PATH, "checkpoints")
@@ -25,7 +25,7 @@ config = {
 	"memory_size": 100000,
 	"image_h": 84,
 	"image_w": 84,
-	"max_frames": 70000
+	"max_frames": 10
 }
 
 
@@ -49,6 +49,7 @@ class PythonVAEController(object):
 		screen = self.screen_capturer.MergedScreenshot
 		if len(screen) == 0:
 			return None
+		self.score = self.screen_capturer.Score
 		return np.array(screen, dtype=np.uint8).reshape((self.image_h, self.image_w,1), order = 'F').swapaxes(0, 1)
 
 	def set_state(self, state):
@@ -59,6 +60,7 @@ class PythonVAEController(object):
 		start_time = time.clock()
 
 		screen = self.get_screen()
+		
 
         # Skip frames when no screen is available.
 		if screen is None:
@@ -81,10 +83,13 @@ class PythonVAEController(object):
 			finish_time = time.clock()
 			elapsed = finish_time - start_time
 
+
 		elif  self.step_count == self.max_frames:
 			self.screen_capturer.bLearningMode = False
+			self.step_count += 1
 
-		state = self.trainer.get_state(screen)
-		self.set_state(state)
-
+		else:
+			state = self.trainer.get_state(screen, self.score)
+			self.set_state(state)
+		
 	
